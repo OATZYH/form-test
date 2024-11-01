@@ -1,17 +1,16 @@
-// types.ts
-export type FormulationType = 'rinse-off' | 'leave-on';
+// types/index.ts
+import { z } from 'zod';
+import {
+  formulationTypeSchema,
+  variantSchema,
+  fieldConfigSchema,
+  targetGroupSchema,
+  otherSpecificationsSchema,
+  formDataSchema,
+} from '../schemas';
 
-export type Variant =
-  | 'make-up remover'
-  | 'cleanser'
-  | 'rinse-off mask'
-  | 'moisturizer'
-  | 'sunscreen'
-  | 'dark-spot treatment'
-  | 'acne spot treatment'
-  | 'under-eye treatment'
-  | 'lip care';
-
+export type FormulationType = z.infer<typeof formulationTypeSchema>;
+export type Variant = z.infer<typeof variantSchema>;
 export type InputType = 'text' | 'number' | 'select' | 'radio' | 'checkbox';
 
 export interface FieldConfig {
@@ -20,11 +19,10 @@ export interface FieldConfig {
   type: InputType;
   required: boolean;
   options?: string[]; // Applicable for 'select', 'radio', 'checkbox'
+  enable?: boolean; // New field to control availability
 }
 
-export interface PhysicalAppearances {
-  [key: string]: any; // Dynamic keys based on fields
-}
+export type PhysicalAppearances = Record<string, any>; // Dynamic keys based on fields
 
 export interface TargetGroup {
   gender?: string;
@@ -36,7 +34,7 @@ export interface OtherSpecifications {
   specificIngredients?: string;
   claims?: string;
   targetGroup?: TargetGroup;
-  preferences?: string;
+  preferences?: Record<string, boolean>; // Updated to reflect checkbox preferences
 }
 
 export interface FormData {

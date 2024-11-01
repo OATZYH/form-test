@@ -1,13 +1,12 @@
-// components/HeroSection.tsx
 import React from 'react';
 import Image from 'next/image';
 import { useFormContext } from 'react-hook-form';
-import { variantImages } from '../configs/physicalAppearancesConfig';
-import { FormData } from './types';
+import { variantImages } from '../configs/variantImages';
+import { FormData, Variant } from '../types';
 
 const HeroSection: React.FC = () => {
   const { watch } = useFormContext<FormData>();
-  const variant = watch('variant');
+  const variant = watch('variant') as Variant;
 
   const imageUrl = variantImages[variant];
 
@@ -16,13 +15,13 @@ const HeroSection: React.FC = () => {
   }
 
   return (
-    <div style={{ marginBottom: '2rem' }}>
+    <div style={{ marginBottom: '2rem', position: 'relative', width: '100%', height: '300px' }}>
       <Image
         src={imageUrl}
         alt={`${variant} image`}
-        width={600} // Adjust as needed
-        height={400} // Adjust as needed
+        layout="fill"
         objectFit="cover"
+        priority // Optional: prioritize loading
       />
     </div>
   );

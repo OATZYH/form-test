@@ -1,8 +1,7 @@
-// components/FormField.tsx
 import React from 'react';
 import { useFormContext, FieldError } from 'react-hook-form';
-import { FieldConfig } from './types'; // Adjust the path as needed
-import { getNestedError } from '../utils/getNestedError'; // Ensure correct path
+import { FieldConfig } from '../types';
+import { getNestedError } from '../utils/getNestedError';
 
 interface FormFieldProps {
   field: FieldConfig;
@@ -16,7 +15,7 @@ const FormField: React.FC<FormFieldProps> = ({ field, parentName }) => {
   } = useFormContext();
 
   const fieldName = `${parentName}.${field.name}`;
-  const error = getNestedError(errors, fieldName);
+  const error = getNestedError(errors, fieldName) as FieldError | undefined;
 
   const renderInput = () => {
     switch (field.type) {
@@ -25,7 +24,7 @@ const FormField: React.FC<FormFieldProps> = ({ field, parentName }) => {
         return (
           <input
             type={field.type}
-            {...register(fieldName, { required: field.required })}
+            {...register(fieldName)}
             style={{ marginLeft: '0.5rem' }}
           />
         );
@@ -33,7 +32,7 @@ const FormField: React.FC<FormFieldProps> = ({ field, parentName }) => {
       case 'select':
         return (
           <select
-            {...register(fieldName, { required: field.required })}
+            {...register(fieldName)}
             style={{ marginLeft: '0.5rem' }}
           >
             <option value="">Select {field.label}</option>
@@ -53,7 +52,7 @@ const FormField: React.FC<FormFieldProps> = ({ field, parentName }) => {
                 <input
                   type="radio"
                   value={option}
-                  {...register(fieldName, { required: field.required })}
+                  {...register(fieldName)}
                 />
                 {option}
               </label>
@@ -90,7 +89,7 @@ const FormField: React.FC<FormFieldProps> = ({ field, parentName }) => {
       </label>
       {error && (
         <p style={{ color: 'red', marginTop: '0.25rem' }}>
-          {field.label} is required.
+          {error.message}
         </p>
       )}
     </div>
